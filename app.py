@@ -18,6 +18,25 @@ else:
 # Initialize extensions
 db.init_app(app)
 login_manager = LoginManager()
+
+# Initialize database on startup (for production)
+def init_database():
+    """Initialize database tables and populate if empty"""
+    with app.app_context():
+        db.create_all()
+        # Check if database needs to be populated
+        from models import Profile
+        if not Profile.query.first():
+            try:
+                from populate_portfolio import populate_database
+                populate_database()
+                print("Database initialized and populated successfully!")
+            except Exception as e:
+                print(f"Error populating database: {e}")
+
+# Initialize database when app starts (only in production)
+if os.getenv('FLASK_ENV') == 'production':
+    init_database()
 login_manager.init_app(app)
 login_manager.login_view = 'admin_login'
 login_manager.login_message = 'Please log in to access this page.'
