@@ -85,6 +85,7 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+
 .navbar.scrolled {
     box-shadow: var(--shadow-md);
     padding: 0.75rem 0;
@@ -207,6 +208,21 @@ body.menu-open::before {
 }
 
 @media (max-width: 768px) {
+    /* Fixed navbar on mobile - no scrolling */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 1rem 0;
+    }
+    
+    /* Add padding to body to account for fixed navbar */
+    body {
+        padding-top: 60px;
+    }
+    
     .menu-toggle {
         display: flex;
     }
@@ -277,10 +293,6 @@ body.menu-open::before {
     
     .nav-menu a:hover::before {
         transform: scaleY(1);
-    }
-    
-    .navbar {
-        padding: 1rem 0;
     }
     
     .nav-brand a {
