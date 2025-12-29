@@ -22,17 +22,25 @@ login_manager = LoginManager()
 # Initialize database on startup (for production)
 def init_database():
     """Initialize database tables and populate if empty"""
-    with app.app_context():
-        db.create_all()
-        # Check if database needs to be populated
-        from models import Profile
-        if not Profile.query.first():
-            try:
-                from populate_portfolio import populate_database
-                populate_database()
-                print("Database initialized and populated successfully!")
-            except Exception as e:
-                print(f"Error populating database: {e}")
+    try:
+        with app.app_context():
+            # Test database connection first
+            db.engine.connect()
+            print(f"Database connected: {app.config['SQLALCHEMY_DATABASE_URI'][:20]}...")
+            
+            db.create_all()
+            # Check if database needs to be populated
+            from models import Profile
+            if not Profile.query.first():
+                try:
+                    from populate_portfolio import populate_database
+                    populate_database()
+                    print("Database initialized and populated successfully!")
+                except Exception as e:
+                    print(f"Error populating database: {e}")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        print(f"Database URL: {app.config.get('SQLALCHEMY_DATABASE_URI', 'Not set')[:50]}...")
 
 # Initialize database when app starts (only in production)
 if os.getenv('FLASK_ENV') == 'production':
