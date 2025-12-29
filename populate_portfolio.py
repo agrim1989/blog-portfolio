@@ -400,7 +400,7 @@ Designed complex MySQL queries for high-performance data retrieval.""",
         db.session.flush()
         
         # Create Tags
-        tags_data = ['Python', 'Django', 'Flask', 'FastAPI', 'AI', 'Machine Learning', 'RAG', 'LLM', 'Software Engineering', 'Leadership', 'Microservices', 'AWS', 'Generative AI', 'API Development', 'Web Development']
+        tags_data = ['Python', 'Django', 'Flask', 'FastAPI', 'AI', 'Machine Learning', 'RAG', 'LLM', 'Software Engineering', 'Leadership', 'Microservices', 'AWS', 'Generative AI', 'API Development', 'Web Development', 'System Design', 'Architecture', 'Design Patterns', 'Data Structures', 'Distributed Systems', 'Caching', 'Interview']
         tag_objects = {}
         for tag_name in tags_data:
             tag = Tag.query.filter_by(slug=tag_name.lower().replace(' ', '-')).first()
@@ -1163,6 +1163,570 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'status': 'published',
                 'published_date': datetime(2024, 8, 12, 11, 0, 0),
                 'featured_image': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop&q=80&auto=format'
+            },
+            {
+                'title': 'High-Level System Design: Building Scalable Architectures',
+                'slug': 'high-level-system-design-scalable-architectures',
+                'content': '''<h2>Introduction to High-Level System Design</h2>
+                <p>High-level system design (HLD) focuses on the overall architecture of a system, defining major components, their interactions, and how they work together to meet system requirements. It's the blueprint that guides the development of scalable, maintainable, and efficient systems.</p>
+                
+                <h3>Key Principles of High-Level Design</h3>
+                <h4>1. Scalability</h4>
+                <p>Design systems that can handle growth in users, data, and traffic:</p>
+                <ul>
+                    <li><strong>Horizontal Scaling:</strong> Add more servers to handle increased load</li>
+                    <li><strong>Vertical Scaling:</strong> Increase resources of existing servers</li>
+                    <li><strong>Load Balancing:</strong> Distribute traffic across multiple servers</li>
+                    <li><strong>Database Sharding:</strong> Partition data across multiple databases</li>
+                </ul>
+                
+                <h4>2. Reliability and Availability</h4>
+                <p>Ensure system remains operational:</p>
+                <ul>
+                    <li>Redundancy at every level (servers, databases, networks)</li>
+                    <li>Failover mechanisms for automatic recovery</li>
+                    <li>Health checks and monitoring</li>
+                    <li>Disaster recovery planning</li>
+                </ul>
+                
+                <h4>3. Performance</h4>
+                <p>Optimize for speed and efficiency:</p>
+                <ul>
+                    <li>Caching strategies (Redis, Memcached)</li>
+                    <li>CDN for static content delivery</li>
+                    <li>Database indexing and query optimization</li>
+                    <li>Asynchronous processing for long-running tasks</li>
+                </ul>
+                
+                <h3>Common High-Level Design Patterns</h3>
+                <h4>1. Microservices Architecture</h4>
+                <p>Break down application into independent, loosely coupled services:</p>
+                <pre><code>┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   API       │    │   User      │    │   Payment   │
+│   Gateway   │───▶│   Service   │    │   Service   │
+└─────────────┘    └─────────────┘    └─────────────┘
+       │                  │                  │
+       └──────────────────┴──────────────────┘
+                          │
+                   ┌─────────────┐
+                   │   Message   │
+                   │   Queue     │
+                   └─────────────┘</code></pre>
+                
+                <h4>2. Layered Architecture</h4>
+                <p>Organize system into distinct layers:</p>
+                <ul>
+                    <li><strong>Presentation Layer:</strong> User interface and API endpoints</li>
+                    <li><strong>Business Logic Layer:</strong> Core application logic</li>
+                    <li><strong>Data Access Layer:</strong> Database interactions</li>
+                    <li><strong>Infrastructure Layer:</strong> External services and utilities</li>
+                </ul>
+                
+                <h4>3. Event-Driven Architecture</h4>
+                <p>Components communicate through events:</p>
+                <pre><code># Example: Event-driven system
+class OrderService:
+    def create_order(self, order_data):
+        order = self.save_order(order_data)
+        # Publish event
+        event_bus.publish('order.created', {
+            'order_id': order.id,
+            'user_id': order.user_id,
+            'amount': order.total
+        })
+        return order
+
+class PaymentService:
+    def handle_order_created(self, event):
+        # Process payment when order is created
+        self.process_payment(event['order_id'], event['amount'])</code></pre>
+                
+                <h3>Designing for Scale</h3>
+                <h4>Capacity Estimation</h4>
+                <p>Estimate system requirements:</p>
+                <ul>
+                    <li><strong>Traffic:</strong> Requests per second (RPS)</li>
+                    <li><strong>Storage:</strong> Data volume and growth rate</li>
+                    <li><strong>Bandwidth:</strong> Network throughput requirements</li>
+                    <li><strong>Compute:</strong> CPU and memory needs</li>
+                </ul>
+                
+                <h4>Database Design</h4>
+                <p>Choose appropriate database types:</p>
+                <ul>
+                    <li><strong>SQL Databases:</strong> For structured data with ACID requirements</li>
+                    <li><strong>NoSQL Databases:</strong> For flexible schemas and horizontal scaling</li>
+                    <li><strong>Time-Series DB:</strong> For metrics and analytics</li>
+                    <li><strong>Graph Databases:</strong> For relationship-heavy data</li>
+                </ul>
+                
+                <h3>System Design Example: URL Shortener</h3>
+                <p>Key components:</p>
+                <ol>
+                    <li><strong>API Service:</strong> Handle URL shortening requests</li>
+                    <li><strong>Hash Service:</strong> Generate unique short codes</li>
+                    <li><strong>Database:</strong> Store mappings (short URL → long URL)</li>
+                    <li><strong>Cache:</strong> Redis for frequently accessed URLs</li>
+                    <li><strong>Load Balancer:</strong> Distribute traffic</li>
+                </ol>
+                
+                <h3>Best Practices</h3>
+                <ul>
+                    <li>Start simple, add complexity only when needed</li>
+                    <li>Design for failure - assume components will fail</li>
+                    <li>Use proven technologies and patterns</li>
+                    <li>Consider trade-offs (consistency vs availability)</li>
+                    <li>Document design decisions and rationale</li>
+                    <li>Plan for monitoring and observability</li>
+                </ul>
+                
+                <p>High-level system design is about making informed architectural decisions that balance requirements, constraints, and future scalability needs.</p>''',
+                'excerpt': 'Learn the fundamentals of high-level system design, including scalability patterns, architecture styles, and best practices for building robust systems.',
+                'category': tech_category,
+                'tags': ['System Design', 'Architecture', 'Scalability', 'Software Engineering'],
+                'status': 'published',
+                'published_date': datetime(2024, 9, 5, 10, 0, 0),
+                'featured_image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop&q=80'
+            },
+            {
+                'title': 'Low-Level System Design: Implementing Efficient Components',
+                'slug': 'low-level-system-design-efficient-components',
+                'content': '''<h2>Introduction to Low-Level System Design</h2>
+                <p>Low-level system design (LLD) focuses on the detailed design of individual components, classes, modules, and their interactions. It bridges the gap between high-level architecture and actual code implementation, ensuring components are well-designed, efficient, and maintainable.</p>
+                
+                <h3>Key Concepts in Low-Level Design</h3>
+                <h4>1. Object-Oriented Design Principles</h4>
+                <p>Apply SOLID principles:</p>
+                <ul>
+                    <li><strong>S - Single Responsibility:</strong> Each class has one reason to change</li>
+                    <li><strong>O - Open/Closed:</strong> Open for extension, closed for modification</li>
+                    <li><strong>L - Liskov Substitution:</strong> Subtypes must be substitutable for base types</li>
+                    <li><strong>I - Interface Segregation:</strong> Clients shouldn't depend on unused interfaces</li>
+                    <li><strong>D - Dependency Inversion:</strong> Depend on abstractions, not concretions</li>
+                </ul>
+                
+                <h4>2. Design Patterns</h4>
+                <p>Common patterns for component design:</p>
+                
+                <h5>Factory Pattern</h5>
+                <pre><code>class PaymentProcessorFactory:
+    @staticmethod
+    def create_processor(payment_type):
+        if payment_type == 'credit_card':
+            return CreditCardProcessor()
+        elif payment_type == 'paypal':
+            return PayPalProcessor()
+        elif payment_type == 'stripe':
+            return StripeProcessor()
+        else:
+            raise ValueError(f"Unknown payment type: {payment_type}")
+
+# Usage
+processor = PaymentProcessorFactory.create_processor('stripe')
+processor.process_payment(amount)</code></pre>
+                
+                <h5>Observer Pattern</h5>
+                <pre><code>class EventPublisher:
+    def __init__(self):
+        self._observers = []
+    
+    def subscribe(self, observer):
+        self._observers.append(observer)
+    
+    def notify(self, event):
+        for observer in self._observers:
+            observer.update(event)
+
+class EmailService:
+    def update(self, event):
+        if event.type == 'order_placed':
+            self.send_order_confirmation(event.data)
+
+# Usage
+publisher = EventPublisher()
+publisher.subscribe(EmailService())
+publisher.notify(OrderEvent('order_placed', order_data))</code></pre>
+                
+                <h5>Strategy Pattern</h5>
+                <pre><code>class SortingStrategy:
+    def sort(self, data):
+        raise NotImplementedError
+
+class QuickSort(SortingStrategy):
+    def sort(self, data):
+        # Quick sort implementation
+        return sorted(data)
+
+class MergeSort(SortingStrategy):
+    def sort(self, data):
+        # Merge sort implementation
+        return self._merge_sort(data)
+
+class DataProcessor:
+    def __init__(self, strategy: SortingStrategy):
+        self.strategy = strategy
+    
+    def process(self, data):
+        return self.strategy.sort(data)</code></pre>
+                
+                <h3>Designing Data Structures</h3>
+                <h4>1. Cache Implementation</h4>
+                <pre><code>from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+    
+    def get(self, key):
+        if key not in self.cache:
+            return -1
+        # Move to end (most recently used)
+        self.cache.move_to_end(key)
+        return self.cache[key]
+    
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        
+        if len(self.cache) > self.capacity:
+            # Remove least recently used
+            self.cache.popitem(last=False)</code></pre>
+                
+                <h4>2. Rate Limiter</h4>
+                <pre><code>from collections import deque
+import time
+
+class RateLimiter:
+    def __init__(self, max_requests, time_window):
+        self.max_requests = max_requests
+        self.time_window = time_window
+        self.requests = deque()
+    
+    def is_allowed(self, user_id):
+        now = time.time()
+        # Remove requests outside time window
+        while self.requests and self.requests[0] < now - self.time_window:
+            self.requests.popleft()
+        
+        if len(self.requests) < self.max_requests:
+            self.requests.append(now)
+            return True
+        return False</code></pre>
+                
+                <h3>Component Design Example: Task Scheduler</h3>
+                <pre><code>from heapq import heappush, heappop
+import threading
+import time
+
+class Task:
+    def __init__(self, task_id, execute_at, callback):
+        self.task_id = task_id
+        self.execute_at = execute_at
+        self.callback = callback
+    
+    def __lt__(self, other):
+        return self.execute_at < other.execute_at
+
+class TaskScheduler:
+    def __init__(self):
+        self.tasks = []
+        self.lock = threading.Lock()
+        self.running = False
+    
+    def schedule(self, task_id, delay_seconds, callback):
+        execute_at = time.time() + delay_seconds
+        task = Task(task_id, execute_at, callback)
+        
+        with self.lock:
+            heappush(self.tasks, task)
+    
+    def start(self):
+        self.running = True
+        while self.running:
+            with self.lock:
+                if not self.tasks:
+                    time.sleep(0.1)
+                    continue
+                
+                task = self.tasks[0]
+                if task.execute_at <= time.time():
+                    heappop(self.tasks)
+                    task.callback()
+                else:
+                    sleep_time = task.execute_at - time.time()
+                    time.sleep(min(sleep_time, 0.1))</code></pre>
+                
+                <h3>Designing for Performance</h3>
+                <h4>1. Optimize Data Access</h4>
+                <ul>
+                    <li>Use appropriate data structures (hash maps for O(1) lookups)</li>
+                    <li>Implement lazy loading for large datasets</li>
+                    <li>Use connection pooling for database access</li>
+                    <li>Batch operations when possible</li>
+                </ul>
+                
+                <h4>2. Memory Management</h4>
+                <ul>
+                    <li>Avoid memory leaks (proper cleanup)</li>
+                    <li>Use object pooling for frequently created objects</li>
+                    <li>Implement pagination for large result sets</li>
+                    <li>Monitor memory usage and optimize hot paths</li>
+                </ul>
+                
+                <h4>3. Concurrency</h4>
+                <pre><code>import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+class AsyncDataProcessor:
+    def __init__(self):
+        self.executor = ThreadPoolExecutor(max_workers=4)
+    
+    async def process_batch(self, items):
+        loop = asyncio.get_event_loop()
+        tasks = [
+            loop.run_in_executor(self.executor, self.process_item, item)
+            for item in items
+        ]
+        return await asyncio.gather(*tasks)
+    
+    def process_item(self, item):
+        # Process individual item
+        return processed_item</code></pre>
+                
+                <h3>Error Handling and Resilience</h3>
+                <pre><code>class RetryableOperation:
+    def __init__(self, max_retries=3, backoff_factor=2):
+        self.max_retries = max_retries
+        self.backoff_factor = backoff_factor
+    
+    def execute(self, operation, *args, **kwargs):
+        for attempt in range(self.max_retries):
+            try:
+                return operation(*args, **kwargs)
+            except Exception as e:
+                if attempt == self.max_retries - 1:
+                    raise
+                wait_time = self.backoff_factor ** attempt
+                time.sleep(wait_time)
+        return None</code></pre>
+                
+                <h3>Best Practices</h3>
+                <ul>
+                    <li>Design for testability - make components easy to unit test</li>
+                    <li>Keep components focused and cohesive</li>
+                    <li>Minimize coupling between components</li>
+                    <li>Use dependency injection for flexibility</li>
+                    <li>Document interfaces and contracts clearly</li>
+                    <li>Consider edge cases and error scenarios</li>
+                    <li>Optimize for readability and maintainability</li>
+                </ul>
+                
+                <p>Low-level design transforms architectural blueprints into concrete, implementable components that are efficient, maintainable, and aligned with system requirements.</p>''',
+                'excerpt': 'Master low-level system design with design patterns, data structures, and component implementation strategies for building efficient software systems.',
+                'category': tech_category,
+                'tags': ['System Design', 'Design Patterns', 'Data Structures', 'Software Engineering'],
+                'status': 'published',
+                'published_date': datetime(2024, 9, 15, 14, 0, 0),
+                'featured_image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop&q=80'
+            },
+            {
+                'title': 'System Design Interview: Designing a Distributed Cache',
+                'slug': 'system-design-interview-distributed-cache',
+                'content': '''<h2>Designing a Distributed Cache System</h2>
+                <p>Distributed caching is a critical component of modern systems, enabling fast data access and reducing database load. This post walks through designing a production-ready distributed cache system, a common system design interview question.</p>
+                
+                <h3>Requirements</h3>
+                <h4>Functional Requirements</h4>
+                <ul>
+                    <li>Store key-value pairs</li>
+                    <li>Retrieve value by key</li>
+                    <li>Set expiration time for keys</li>
+                    <li>Handle cache eviction when full</li>
+                </ul>
+                
+                <h4>Non-Functional Requirements</h4>
+                <ul>
+                    <li>High availability (99.9% uptime)</li>
+                    <li>Low latency (&lt;10ms for cache hits)</li>
+                    <li>Scalability (handle millions of requests per second)</li>
+                    <li>Consistency (eventual consistency acceptable)</li>
+                </ul>
+                
+                <h3>High-Level Design</h3>
+                <h4>Architecture Overview</h4>
+                <pre><code>┌─────────────┐
+│   Client    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   Load      │
+│   Balancer  │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│  Cache      │    │  Cache      │    │  Cache      │
+│  Server 1   │    │  Server 2   │    │  Server 3   │
+└─────────────┘    └─────────────┘    └─────────────┘
+       │                  │                  │
+       └──────────────────┴──────────────────┘
+                          │
+                   ┌─────────────┐
+                   │  Consistent │
+                   │  Hashing    │
+                   └─────────────┘</code></pre>
+                
+                <h4>Key Design Decisions</h4>
+                <ol>
+                    <li><strong>Consistent Hashing:</strong> Distribute keys across cache servers</li>
+                    <li><strong>Replication:</strong> Store copies on multiple servers for availability</li>
+                    <li><strong>Eviction Policy:</strong> LRU (Least Recently Used) for cache eviction</li>
+                    <li><strong>Write-Through vs Write-Back:</strong> Write-through for consistency</li>
+                </ol>
+                
+                <h3>Low-Level Design</h3>
+                <h4>Cache Node Implementation</h4>
+                <pre><code>from collections import OrderedDict
+import threading
+import time
+
+class CacheNode:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+        self.expiry_times = {}
+        self.lock = threading.RLock()
+    
+    def get(self, key):
+        with self.lock:
+            if key not in self.cache:
+                return None
+            
+            # Check expiration
+            if key in self.expiry_times:
+                if time.time() > self.expiry_times[key]:
+                    del self.cache[key]
+                    del self.expiry_times[key]
+                    return None
+            
+            # Move to end (LRU)
+            self.cache.move_to_end(key)
+            return self.cache[key]
+    
+    def set(self, key, value, ttl=None):
+        with self.lock:
+            if key in self.cache:
+                self.cache.move_to_end(key)
+            elif len(self.cache) >= self.capacity:
+                # Evict least recently used
+                oldest_key = next(iter(self.cache))
+                del self.cache[oldest_key]
+                if oldest_key in self.expiry_times:
+                    del self.expiry_times[oldest_key]
+            
+            self.cache[key] = value
+            if ttl:
+                self.expiry_times[key] = time.time() + ttl
+    
+    def delete(self, key):
+        with self.lock:
+            if key in self.cache:
+                del self.cache[key]
+                if key in self.expiry_times:
+                    del self.expiry_times[key]</code></pre>
+                
+                <h4>Consistent Hashing</h4>
+                <pre><code>import hashlib
+
+class ConsistentHash:
+    def __init__(self, nodes, replicas=3):
+        self.replicas = replicas
+        self.ring = {}
+        self.sorted_keys = []
+        
+        for node in nodes:
+            for i in range(replicas):
+                key = self._hash(f"{node}:{i}")
+                self.ring[key] = node
+                self.sorted_keys.append(key)
+        
+        self.sorted_keys.sort()
+    
+    def _hash(self, key):
+        return int(hashlib.md5(key.encode()).hexdigest(), 16)
+    
+    def get_node(self, key):
+        if not self.ring:
+            return None
+        
+        hash_key = self._hash(key)
+        
+        # Find first node with hash >= key's hash
+        for ring_key in self.sorted_keys:
+            if ring_key >= hash_key:
+                return self.ring[ring_key]
+        
+        # Wrap around to first node
+        return self.ring[self.sorted_keys[0]]</code></pre>
+                
+                <h4>Distributed Cache Client</h4>
+                <pre><code>class DistributedCache:
+    def __init__(self, nodes):
+        self.hash_ring = ConsistentHash(nodes)
+        self.nodes = {node: CacheNode(capacity=10000) for node in nodes}
+    
+    def get(self, key):
+        node = self.hash_ring.get_node(key)
+        return self.nodes[node].get(key)
+    
+    def set(self, key, value, ttl=None):
+        node = self.hash_ring.get_node(key)
+        self.nodes[node].set(key, value, ttl)
+    
+    def delete(self, key):
+        node = self.hash_ring.get_node(key)
+        self.nodes[node].delete(key)</code></pre>
+                
+                <h3>Scaling Considerations</h3>
+                <h4>1. Horizontal Scaling</h4>
+                <ul>
+                    <li>Add/remove cache nodes dynamically</li>
+                    <li>Rebalance keys when nodes are added/removed</li>
+                    <li>Minimize data movement during rebalancing</li>
+                </ul>
+                
+                <h4>2. Replication</h4>
+                <ul>
+                    <li>Replicate data across multiple nodes</li>
+                    <li>Read from replica if primary fails</li>
+                    <li>Handle replication lag</li>
+                </ul>
+                
+                <h4>3. Monitoring</h4>
+                <ul>
+                    <li>Cache hit/miss ratio</li>
+                    <li>Latency metrics</li>
+                    <li>Memory usage per node</li>
+                    <li>Network bandwidth</li>
+                </ul>
+                
+                <h3>Trade-offs</h3>
+                <ul>
+                    <li><strong>Consistency vs Availability:</strong> Choose eventual consistency for better availability</li>
+                    <li><strong>Memory vs Performance:</strong> More memory allows larger cache, better hit rates</li>
+                    <li><strong>Complexity vs Features:</strong> Simple design vs advanced features like persistence</li>
+                </ul>
+                
+                <p>This design demonstrates how to approach system design problems by breaking them down into high-level architecture and low-level implementation details.</p>''',
+                'excerpt': 'Step-by-step guide to designing a distributed cache system, covering consistent hashing, replication, and implementation details for system design interviews.',
+                'category': tech_category,
+                'tags': ['System Design', 'Distributed Systems', 'Caching', 'Interview'],
+                'status': 'published',
+                'published_date': datetime(2024, 9, 25, 16, 0, 0),
+                'featured_image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop&q=80'
             }
         ]
         
