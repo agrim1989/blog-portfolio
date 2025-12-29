@@ -34,7 +34,14 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration"""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = config('DATABASE_URL', default=f"sqlite:///{basedir / 'instance' / 'site.db'}")
+    # Handle both PostgreSQL (from Render) and SQLite fallback
+    database_url = config('DATABASE_URL', default='')
+    if database_url and database_url.startswith('postgres'):
+        # PostgreSQL from Render or other providers
+        SQLALCHEMY_DATABASE_URI = database_url.replace('postgres://', 'postgresql://')
+    else:
+        # Fallback to SQLite
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'instance' / 'site.db'}"
 
 
 config_dict = {

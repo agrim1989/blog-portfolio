@@ -1,7 +1,9 @@
 """
 Script to populate portfolio database from resume information
 """
+import os
 from app import app, db
+from config import config_dict
 from models import (
     User, Profile, Education, Experience, Skill, Project, Achievement,
     Category, Tag, Post
@@ -10,6 +12,13 @@ from datetime import datetime, date
 from werkzeug.security import generate_password_hash
 
 def populate_database():
+    # Set production config if needed
+    env = os.getenv('FLASK_ENV', 'development')
+    if env == 'production':
+        app.config.from_object(config_dict['production'])
+    else:
+        app.config.from_object(config_dict['default'])
+    
     with app.app_context():
         # Create tables
         db.create_all()

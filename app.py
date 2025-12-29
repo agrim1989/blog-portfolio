@@ -8,7 +8,12 @@ from datetime import datetime
 import os
 
 app = Flask(__name__)
-app.config.from_object(config_dict['default'])
+# Use production config if FLASK_ENV is set to production
+env = os.getenv('FLASK_ENV', 'development')
+if env == 'production':
+    app.config.from_object(config_dict['production'])
+else:
+    app.config.from_object(config_dict['default'])
 
 # Initialize extensions
 db.init_app(app)
@@ -657,5 +662,7 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    # Only run in debug mode for local development
+    debug_mode = os.getenv('FLASK_ENV') != 'production'
+    app.run(debug=debug_mode)
 
