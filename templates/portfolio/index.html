@@ -10,7 +10,9 @@
             <div class="hero-image-wrapper">
                 {% if profile.profile_image %}
                 <div class="hero-image">
-                    <img src="{{ url_for('uploaded_file', file_type='images', filename=profile.profile_image) }}" alt="{{ profile.name }}">
+                    <img src="{{ url_for('uploaded_file', file_type='images', filename=profile.profile_image) }}" 
+                         onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/' + profile.profile_image) }}';" 
+                         alt="{{ profile.name }}">
                 </div>
                 {% else %}
                 <div class="hero-image" style="background: var(--gradient-modern); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; font-weight: 700;">

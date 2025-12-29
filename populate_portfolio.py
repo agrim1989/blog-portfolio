@@ -59,7 +59,7 @@ including Generative AI, Retrieval-Augmented Generation (RAG), and Large Languag
         profile.github_url = "https://github.com/agrim1989"
         profile.website_url = "https://agrimsharma.github.io"
         # Set profile image to static file (works on Render)
-        profile.profile_image = "profile.jpg"
+        profile.profile_image = "1712210182705.jpeg"
         
         db.session.add(profile)
         db.session.flush()
