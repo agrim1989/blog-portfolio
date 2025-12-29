@@ -30,14 +30,15 @@
 
 **Basic Settings:**
 - **Name**: `blog-portfolio` (or your preferred name)
-- **Environment**: **Python 3**
+- **Environment**: **Docker** (or Python 3 - but ensure Python 3.12 is selected)
 - **Region**: Same as database
 - **Branch**: `main`
 - **Root Directory**: (leave empty)
 
 **Build & Start:**
-- **Build Command**: `pip install -r requirements.txt`
+- **Build Command**: `pip install --upgrade pip && pip install -r requirements.txt`
 - **Start Command**: `gunicorn app:app`
+- **Python Version**: Make sure to select **Python 3.12.7** (not 3.13)
 
 ### 5. Add Environment Variables
 

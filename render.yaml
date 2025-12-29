@@ -3,9 +3,9 @@ services:
     name: blog-portfolio
     env: python
     plan: free
-    pythonVersion: 3.12.7
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: gunicorn app:app
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: FLASK_ENV
         value: production
