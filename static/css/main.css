@@ -30,6 +30,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+html {
+    height: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.7;
@@ -42,6 +47,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
     padding-top: 0;
+    position: relative;
+    overflow-x: hidden;
 }
 
 /* Ensure main content doesn't get hidden behind sticky navbar */
@@ -208,6 +215,18 @@ body.menu-open::before {
 }
 
 @media (max-width: 768px) {
+    /* Ensure html and body support fixed positioning */
+    html {
+        position: relative;
+        height: 100%;
+    }
+    
+    body {
+        position: relative;
+        padding-top: 60px !important;
+        overflow-x: hidden;
+    }
+    
     /* Fixed navbar on mobile - no scrolling */
     .navbar {
         position: fixed !important;
@@ -215,26 +234,26 @@ body.menu-open::before {
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
+        max-width: 100% !important;
         padding: 1rem 0 !important;
         z-index: 1000 !important;
         transform: none !important;
         will-change: auto !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
     }
     
     /* Remove sticky positioning completely on mobile */
     .navbar.scrolled {
         position: fixed !important;
         top: 0 !important;
-    }
-    
-    /* Add padding to body to account for fixed navbar */
-    body {
-        padding-top: 60px !important;
+        transform: none !important;
     }
     
     /* Ensure main content accounts for fixed navbar */
     .main-content {
         padding-top: 0;
+        position: relative;
     }
     
     .menu-toggle {

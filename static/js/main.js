@@ -7,11 +7,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Navbar scroll effect (only on desktop, not mobile)
     if (navbar) {
-        let lastScroll = 0;
-        const isMobile = window.innerWidth <= 768;
+        const checkMobile = () => window.innerWidth <= 768;
+        let isMobile = checkMobile();
+        
+        // Set navbar to fixed on mobile immediately
+        if (isMobile) {
+            navbar.style.position = 'fixed';
+            navbar.style.top = '0';
+            navbar.style.left = '0';
+            navbar.style.right = '0';
+            navbar.style.width = '100%';
+            navbar.style.margin = '0';
+        }
         
         // Only add scroll effect on desktop
         if (!isMobile) {
+            let lastScroll = 0;
             window.addEventListener('scroll', function() {
                 const currentScroll = window.pageYOffset;
                 if (currentScroll > 50) {
@@ -25,15 +36,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Handle window resize to toggle scroll effect
         window.addEventListener('resize', function() {
-            const isMobileNow = window.innerWidth <= 768;
-            if (isMobileNow && !isMobile) {
+            const isMobileNow = checkMobile();
+            if (isMobileNow) {
                 // Switched to mobile - ensure navbar is fixed
                 navbar.style.position = 'fixed';
                 navbar.style.top = '0';
                 navbar.style.left = '0';
                 navbar.style.right = '0';
                 navbar.style.width = '100%';
+                navbar.style.margin = '0';
+                navbar.style.transform = 'none';
+            } else if (!isMobile && isMobileNow !== isMobile) {
+                // Switched to desktop - allow scroll effect
+                navbar.style.position = '';
+                navbar.style.top = '';
+                navbar.style.left = '';
+                navbar.style.right = '';
+                navbar.style.width = '';
+                navbar.style.margin = '';
             }
+            isMobile = isMobileNow;
         });
     }
     
