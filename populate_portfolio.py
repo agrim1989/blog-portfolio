@@ -1285,7 +1285,7 @@ class PaymentService:
                 'category': tech_category,
                 'tags': ['System Design', 'Architecture', 'Scalability', 'Software Engineering'],
                 'status': 'published',
-                'published_date': datetime(2024, 9, 5, 10, 0, 0),
+                'published_date': datetime(2024, 12, 20, 10, 0, 0),
                 'featured_image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop&q=80'
             },
             {
@@ -1528,7 +1528,7 @@ class AsyncDataProcessor:
                 'category': tech_category,
                 'tags': ['System Design', 'Design Patterns', 'Data Structures', 'Software Engineering'],
                 'status': 'published',
-                'published_date': datetime(2024, 9, 15, 14, 0, 0),
+                'published_date': datetime(2024, 12, 22, 14, 0, 0),
                 'featured_image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop&q=80'
             },
             {
@@ -1725,7 +1725,7 @@ class ConsistentHash:
                 'category': tech_category,
                 'tags': ['System Design', 'Distributed Systems', 'Caching', 'Interview'],
                 'status': 'published',
-                'published_date': datetime(2024, 9, 25, 16, 0, 0),
+                'published_date': datetime(2024, 12, 24, 16, 0, 0),
                 'featured_image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop&q=80'
             }
         ]
@@ -1734,11 +1734,20 @@ class ConsistentHash:
             # Check if post already exists
             existing_post = Post.query.filter_by(slug=post_data['slug']).first()
             if existing_post:
-                # Update existing post with image if missing, empty, or needs update
+                # Update existing post with latest data
+                existing_post.title = post_data['title']
+                existing_post.content = post_data['content']
+                existing_post.excerpt = post_data['excerpt']
+                existing_post.published_date = post_data['published_date']
+                existing_post.status = post_data['status']
                 if post_data.get('featured_image'):
-                    # Always update to ensure latest image URL
                     existing_post.featured_image = post_data.get('featured_image', '')
-                    print(f"Updated image for existing post: {existing_post.title}")
+                # Update tags
+                existing_post.tags = []
+                for tag_name in post_data['tags']:
+                    if tag_name in tag_objects:
+                        existing_post.tags.append(tag_objects[tag_name])
+                print(f"Updated existing post: {existing_post.title}")
                 continue
             
             post = Post(
