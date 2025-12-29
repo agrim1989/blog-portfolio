@@ -214,13 +214,16 @@ body.menu-open::before {
     -webkit-backdrop-filter: blur(4px);
 }
 
+/* Mobile and Tablet Styles - Full Width Navbar */
 @media (max-width: 768px) {
-    /* Ensure html and body support fixed positioning */
+    /* Ensure html and body support fixed positioning and full width */
     html {
         position: relative;
         height: 100%;
+        width: 100%;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
     }
     
     body {
@@ -230,9 +233,12 @@ body.menu-open::before {
         -webkit-overflow-scrolling: touch;
         width: 100% !important;
         max-width: 100% !important;
+        margin: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     
-    /* Fixed navbar on mobile - no scrolling, full width */
+    /* Fixed navbar on mobile - full device width, no scrolling */
     .navbar {
         position: fixed !important;
         top: 0 !important;
@@ -240,21 +246,30 @@ body.menu-open::before {
         right: 0 !important;
         width: 100vw !important;
         max-width: 100vw !important;
+        min-width: 100vw !important;
         padding: 1rem 0 !important;
         z-index: 1000 !important;
         transform: none !important;
         will-change: auto !important;
         margin: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         box-sizing: border-box !important;
         overflow: visible !important;
+        border-left: none !important;
+        border-right: none !important;
     }
     
-    /* Make navbar container full width on mobile */
+    /* Make navbar container full width on mobile - no restrictions */
     .navbar .container {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 100% !important;
         padding: 0 16px !important;
-        margin: 0 !important;
+        margin: 0 auto !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
     }
     
     /* Remove sticky positioning completely on mobile */
@@ -262,6 +277,8 @@ body.menu-open::before {
         position: fixed !important;
         top: 0 !important;
         transform: none !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
     }
     
     /* Ensure main content accounts for fixed navbar */
@@ -271,6 +288,14 @@ body.menu-open::before {
         width: 100% !important;
         max-width: 100% !important;
         overflow-x: hidden;
+        margin: 0 !important;
+    }
+    
+    /* Ensure all containers don't cause overflow */
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     
     .menu-toggle {

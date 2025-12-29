@@ -5,30 +5,73 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const navbar = document.querySelector('.navbar');
     
-    // Navbar scroll effect (only on desktop, not mobile)
+    // Navbar scroll effect and full-width handling for mobile devices
     if (navbar) {
         const checkMobile = () => window.innerWidth <= 768;
-        let isMobile = checkMobile();
         
-        // Set navbar to fixed on mobile immediately
-        if (isMobile) {
+        // Function to set navbar to full width on mobile
+        const setMobileNavbar = () => {
+            const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
             navbar.style.position = 'fixed';
             navbar.style.top = '0';
             navbar.style.left = '0';
             navbar.style.right = '0';
-            navbar.style.width = '100vw';
-            navbar.style.maxWidth = '100vw';
+            navbar.style.width = viewportWidth + 'px';
+            navbar.style.maxWidth = viewportWidth + 'px';
+            navbar.style.minWidth = viewportWidth + 'px';
             navbar.style.margin = '0';
+            navbar.style.marginLeft = '0';
+            navbar.style.marginRight = '0';
             navbar.style.transform = 'none';
             navbar.style.overflow = 'visible';
+            navbar.style.boxSizing = 'border-box';
             
-            // Also fix the container inside navbar
+            // Also fix the container inside navbar to be full width
             const navbarContainer = navbar.querySelector('.container');
             if (navbarContainer) {
                 navbarContainer.style.width = '100%';
                 navbarContainer.style.maxWidth = '100%';
-                navbarContainer.style.margin = '0';
+                navbarContainer.style.minWidth = '100%';
+                navbarContainer.style.margin = '0 auto';
+                navbarContainer.style.marginLeft = '0';
+                navbarContainer.style.marginRight = '0';
+                navbarContainer.style.boxSizing = 'border-box';
             }
+        };
+        
+        // Function to reset navbar for desktop
+        const setDesktopNavbar = () => {
+            navbar.style.position = '';
+            navbar.style.top = '';
+            navbar.style.left = '';
+            navbar.style.right = '';
+            navbar.style.width = '';
+            navbar.style.maxWidth = '';
+            navbar.style.minWidth = '';
+            navbar.style.margin = '';
+            navbar.style.marginLeft = '';
+            navbar.style.marginRight = '';
+            navbar.style.transform = '';
+            navbar.style.overflow = '';
+            navbar.style.boxSizing = '';
+            
+            const navbarContainer = navbar.querySelector('.container');
+            if (navbarContainer) {
+                navbarContainer.style.width = '';
+                navbarContainer.style.maxWidth = '';
+                navbarContainer.style.minWidth = '';
+                navbarContainer.style.margin = '';
+                navbarContainer.style.marginLeft = '';
+                navbarContainer.style.marginRight = '';
+                navbarContainer.style.boxSizing = '';
+            }
+        };
+        
+        let isMobile = checkMobile();
+        
+        // Set navbar to fixed and full width on mobile immediately
+        if (isMobile) {
+            setMobileNavbar();
         }
         
         // Only add scroll effect on desktop
@@ -45,48 +88,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Handle window resize to toggle scroll effect
-        window.addEventListener('resize', function() {
-            const isMobileNow = checkMobile();
-            if (isMobileNow) {
-                // Switched to mobile - ensure navbar is fixed and full width
-                navbar.style.position = 'fixed';
-                navbar.style.top = '0';
-                navbar.style.left = '0';
-                navbar.style.right = '0';
-                navbar.style.width = '100vw';
-                navbar.style.maxWidth = '100vw';
-                navbar.style.margin = '0';
-                navbar.style.transform = 'none';
-                navbar.style.overflow = 'visible';
-                
-                // Also fix the container inside navbar
-                const navbarContainer = navbar.querySelector('.container');
-                if (navbarContainer) {
-                    navbarContainer.style.width = '100%';
-                    navbarContainer.style.maxWidth = '100%';
-                    navbarContainer.style.margin = '0';
+        // Handle window resize and orientation change
+        let resizeTimer;
+        const handleResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const isMobileNow = checkMobile();
+                if (isMobileNow) {
+                    // Switched to mobile - ensure navbar is fixed and full width
+                    setMobileNavbar();
+                } else if (!isMobile && isMobileNow !== isMobile) {
+                    // Switched to desktop - reset navbar
+                    setDesktopNavbar();
                 }
-            } else if (!isMobile && isMobileNow !== isMobile) {
-                // Switched to desktop - allow scroll effect
-                navbar.style.position = '';
-                navbar.style.top = '';
-                navbar.style.left = '';
-                navbar.style.right = '';
-                navbar.style.width = '';
-                navbar.style.maxWidth = '';
-                navbar.style.margin = '';
-                navbar.style.transform = '';
-                navbar.style.overflow = '';
-                
-                const navbarContainer = navbar.querySelector('.container');
-                if (navbarContainer) {
-                    navbarContainer.style.width = '';
-                    navbarContainer.style.maxWidth = '';
-                    navbarContainer.style.margin = '';
+                isMobile = isMobileNow;
+            }, 100);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (checkMobile()) {
+                    setMobileNavbar();
                 }
+            }, 100);
+        });
+        
+        // Re-check on load to handle dynamic viewport changes
+        window.addEventListener('load', () => {
+            if (checkMobile()) {
+                setMobileNavbar();
             }
-            isMobile = isMobileNow;
         });
     }
     
