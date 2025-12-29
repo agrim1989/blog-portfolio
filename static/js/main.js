@@ -9,16 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (navbar) {
         const checkMobile = () => window.innerWidth <= 768;
         
-        // Function to set navbar to full width on mobile
+        // Function to set navbar to full width on mobile (100%)
         const setMobileNavbar = () => {
-            const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
             navbar.style.position = 'fixed';
             navbar.style.top = '0';
             navbar.style.left = '0';
             navbar.style.right = '0';
-            navbar.style.width = viewportWidth + 'px';
-            navbar.style.maxWidth = viewportWidth + 'px';
-            navbar.style.minWidth = viewportWidth + 'px';
+            navbar.style.width = '100%';
+            navbar.style.maxWidth = '100%';
+            navbar.style.minWidth = '100%';
             navbar.style.margin = '0';
             navbar.style.marginLeft = '0';
             navbar.style.marginRight = '0';
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.style.overflow = 'visible';
             navbar.style.boxSizing = 'border-box';
             
-            // Also fix the container inside navbar to be full width
+            // Also fix the container inside navbar to be full width (100%)
             const navbarContainer = navbar.querySelector('.container');
             if (navbarContainer) {
                 navbarContainer.style.width = '100%';

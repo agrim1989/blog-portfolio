@@ -90,12 +90,18 @@ body {
     padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 
 .navbar.scrolled {
     box-shadow: var(--shadow-md);
     padding: 0.75rem 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 .navbar .container {
@@ -103,6 +109,27 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.nav-brand {
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .nav-brand a {
@@ -158,14 +185,7 @@ body {
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 2.5rem;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
+/* Nav menu styles are now in .navbar .container section above */
 
 .nav-menu a {
     color: var(--text-color);
@@ -238,15 +258,15 @@ body.menu-open::before {
         padding-right: 0 !important;
     }
     
-    /* Fixed navbar on mobile - full device width, no scrolling */
+    /* Fixed navbar on mobile - full device width (100%), no scrolling */
     .navbar {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
-        min-width: 100vw !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
         padding: 1rem 0 !important;
         z-index: 1000 !important;
         transform: none !important;
@@ -272,13 +292,32 @@ body.menu-open::before {
         box-sizing: border-box !important;
     }
     
+    /* Navbar components full width on mobile */
+    .nav-brand {
+        width: auto !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .nav-menu {
+        width: auto !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .menu-toggle {
+        width: auto !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
     /* Remove sticky positioning completely on mobile */
     .navbar.scrolled {
         position: fixed !important;
         top: 0 !important;
         transform: none !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     
     /* Ensure main content accounts for fixed navbar */
