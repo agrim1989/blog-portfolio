@@ -58,6 +58,8 @@ including Generative AI, Retrieval-Augmented Generation (RAG), and Large Languag
         profile.linkedin_url = "https://linkedin.com/in/agrim-sharma"
         profile.github_url = "https://github.com/agrim1989"
         profile.website_url = "https://agrimsharma.github.io"
+        # Set profile image to static file (works on Render)
+        profile.profile_image = "profile.jpg"
         
         db.session.add(profile)
         db.session.flush()

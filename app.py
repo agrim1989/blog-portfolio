@@ -614,6 +614,15 @@ def uploaded_file(file_type, filename):
     """Serve uploaded files"""
     if file_type == 'images':
         directory = app.config['UPLOAD_IMAGE_FOLDER']
+        filepath = os.path.join(directory, filename)
+        
+        # For production (Render), check static/images first for profile images
+        # This handles the case where uploaded files don't persist on ephemeral filesystems
+        if not os.path.exists(filepath):
+            static_image_path = os.path.join(app.static_folder, 'images', filename)
+            if os.path.exists(static_image_path):
+                return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
+        
         # Check if it's a PDF resume file (PDFs might be stored in images folder)
         if filename.endswith('.pdf'):
             # Try images folder first, then resumes folder
