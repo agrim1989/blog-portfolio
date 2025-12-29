@@ -5,17 +5,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const navbar = document.querySelector('.navbar');
     
-    // Navbar scroll effect
+    // Navbar scroll effect (only on desktop, not mobile)
     if (navbar) {
         let lastScroll = 0;
-        window.addEventListener('scroll', function() {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+        const isMobile = window.innerWidth <= 768;
+        
+        // Only add scroll effect on desktop
+        if (!isMobile) {
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                lastScroll = currentScroll;
+            });
+        }
+        
+        // Handle window resize to toggle scroll effect
+        window.addEventListener('resize', function() {
+            const isMobileNow = window.innerWidth <= 768;
+            if (isMobileNow && !isMobile) {
+                // Switched to mobile - ensure navbar is fixed
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.left = '0';
+                navbar.style.right = '0';
+                navbar.style.width = '100%';
             }
-            lastScroll = currentScroll;
         });
     }
     
