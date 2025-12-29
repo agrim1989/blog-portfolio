@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <div class="admin-header-actions" style="margin-top: 1rem;">
+                <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">Manage Posts</a>
+                <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Posts</h3>
+                <p class="stat-number">{{ total_posts }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Published</h3>
+                <p class="stat-number">{{ published_posts }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Drafts</h3>
+                <p class="stat-number">{{ draft_posts }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Views</h3>
+                <p class="stat-number">{{ total_views }}</p>
+            </div>
+        </div>
+
+        <div class="dashboard-actions" style="margin-top: 2rem;">
+            <a href="{{ url_for('admin_post_new') }}" class="btn btn-primary">Create New Post</a>
+            <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">Manage All Posts</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

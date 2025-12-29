@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New Post{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="container">
+        <div class="admin-header">
+            <h1>Create New Post</h1>
+            <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">← Back to Posts</a>
+        </div>
+        
+        <form method="POST" action="{{ url_for('admin_post_new') }}" enctype="multipart/form-data" class="admin-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-section">
+                <h2 class="form-section-title">Basic Information</h2>
+                
+                <div class="form-group">
+                    {{ form.title.label(class="form-label") }}
+                    <span class="required">*</span>
+                    {{ form.title(class="form-control", placeholder="Enter post title") }}
+                    {% if form.title.errors %}
+                    <div class="form-errors">
+                        {% for error in form.title.errors %}<span class="error">{{ error }}</span>{% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.slug.label(class="form-label") }}
+                    {{ form.slug(class="form-control", placeholder="post-url-slug") }}
+                    <small class="form-text">Leave empty to auto-generate from title</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.excerpt.label(class="form-label") }}
+                    {{ form.excerpt(class="form-control", rows="3", placeholder="Brief description of the post...") }}
+                    <small class="form-text">A short summary that appears in blog listings</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">Content</h2>
+                
+                <div class="form-group">
+                    {{ form.content.label(class="form-label") }}
+                    <span class="required">*</span>
+                    {{ form.content(class="form-control", id="content-editor") }}
+                    {% if form.content.errors %}
+                    <div class="form-errors">
+                        {% for error in form.content.errors %}<span class="error">{{ error }}</span>{% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">Media</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.featured_image.label(class="form-label") }}
+                        <div class="file-upload-wrapper">
+                            {{ form.featured_image(class="form-control file-input", id="featured_image") }}
+                            <label for="featured_image" class="file-upload-label">
+                                <span class="file-upload-icon">📷</span>
+                                <span class="file-upload-text">Choose Image</span>
+                            </label>
+                        </div>
+                        <small class="form-text">Recommended: 1200x630px for best results</small>
+                    </div>
+                    <div class="form-group">
+                        {{ form.video_url.label(class="form-label") }}
+                        {{ form.video_url(class="form-control", placeholder="https://youtube.com/watch?v=...") }}
+                        <small class="form-text">YouTube or Vimeo embed URL</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.video_file.label(class="form-label") }}
+                    <div class="file-upload-wrapper">
+                        {{ form.video_file(class="form-control file-input", id="video_file") }}
+                        <label for="video_file" class="file-upload-label">
+                            <span class="file-upload-icon">🎥</span>
+                            <span class="file-upload-text">Choose Video File</span>
+                        </label>
+                    </div>
+                    <small class="form-text">Upload video file (mp4, webm, mov, avi) - Max 100MB</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">Publishing Settings</h2>
+                
+                <div class="form-group">
+                    {{ form.status.label(class="form-label") }}
+                    {{ form.status(class="form-control") }}
+                    <small class="form-text">Choose 'Scheduled' to publish at a future date/time</small>
+                </div>
+                
+                <div class="form-group" id="scheduled-date-group" style="display: none;">
+                    {{ form.scheduled_date.label(class="form-label") }}
+                    {{ form.scheduled_date(class="form-control", placeholder="2024-12-25 10:00:00") }}
+                    <small class="form-text">Format: YYYY-MM-DD HH:MM:SS (e.g., 2024-12-25 10:00:00)</small>
+                </div>
+                
+                <div class="form-group" id="published-date-group">
+                    {{ form.published_date.label(class="form-label") }}
+                    {{ form.published_date(class="form-control", placeholder="2024-01-15 10:00:00") }}
+                    <small class="form-text">Format: YYYY-MM-DD HH:MM:SS. Leave empty for current time.</small>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.category_id.label(class="form-label") }}
+                        {{ form.category_id(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.status.label(class="form-label") }}
+                        {{ form.status(class="form-control") }}
+                        <small class="form-text">
+                            <span class="status-hint published">📢 Published:</span> Visible to public<br>
+                            <span class="status-hint draft">🔒 Draft:</span> Hidden/Private (not visible)
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.tags.label(class="form-label") }}
+                    {{ form.tags(class="form-control", placeholder="technology, python, web-development") }}
+                    <small class="form-text">Separate tags with commas</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.published_date.label(class="form-label") }}
+                    {{ form.published_date(class="form-control") }}
+                    <small class="form-text">Leave empty to use current date/time</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">SEO Settings (Optional)</h2>
+                
+                <div class="form-group">
+                    {{ form.meta_description.label(class="form-label") }}
+                    {{ form.meta_description(class="form-control", rows="2", placeholder="Meta description for search engines...") }}
+                    <small class="form-text">Recommended: 150-160 characters</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.meta_keywords.label(class="form-label") }}
+                    {{ form.meta_keywords(class="form-control", placeholder="keyword1, keyword2, keyword3") }}
+                    <small class="form-text">Comma-separated keywords for SEO</small>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create Post</button>
+                <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+tinymce.init({
+    selector: '#content-editor',
+    height: window.innerWidth < 768 ? 400 : 500,
+    plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+    toolbar: window.innerWidth < 768 
+        ? 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link | help'
+        : 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+    menubar: false,
+    mobile: {
+        theme: 'mobile',
+        plugins: ['autosave', 'lists', 'autolink'],
+        toolbar: ['undo', 'bold', 'italic', 'styleselect']
+    },
+    content_style: 'body { font-family: Inter, sans-serif; font-size: 16px; }',
+    branding: false,
+    resize: true
+});
+
+// Show/hide scheduled date based on status
+document.getElementById('status-select').addEventListener('change', function() {
+    const scheduledGroup = document.getElementById('scheduled-date-group');
+    const publishedGroup = document.getElementById('published-date-group');
+    if (this.value === 'scheduled') {
+        scheduledGroup.style.display = 'block';
+        publishedGroup.style.display = 'none';
+    } else {
+        scheduledGroup.style.display = 'none';
+        publishedGroup.style.display = 'block';
+    }
+});
+
+// Show/hide scheduled date based on status
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status-select');
+    if (statusSelect) {
+        statusSelect.addEventListener('change', function() {
+            const scheduledGroup = document.getElementById('scheduled-date-group');
+            const publishedGroup = document.getElementById('published-date-group');
+            if (this.value === 'scheduled') {
+                scheduledGroup.style.display = 'block';
+                publishedGroup.style.display = 'none';
+            } else {
+                scheduledGroup.style.display = 'none';
+                publishedGroup.style.display = 'block';
+            }
+        });
+        // Trigger on load to set initial state
+        statusSelect.dispatchEvent(new Event('change'));
+    }
+});
+
+// Auto-generate slug from title
+document.querySelector('#title').addEventListener('input', function() {
+    const title = this.value;
+    const slugField = document.querySelector('#slug');
+    if (slugField && !slugField.value) {
+        slugField.value = title.toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    }
+});
+</script>
+{% endblock %}
+

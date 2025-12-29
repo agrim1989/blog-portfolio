@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="admin-login-container">
+    <div class="container">
+        <div class="login-box">
+            <h1>Admin Login</h1>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem; font-size: 0.9rem;">
+                Default: <strong>admin</strong> / <strong>admin123</strong>
+            </p>
+            <form method="POST" action="{{ url_for('admin_login') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", placeholder="Enter username", autocomplete="username") }}
+                    {% if form.username.errors %}
+                    <div class="form-errors">
+                        {% for error in form.username.errors %}
+                        <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", placeholder="Enter password", autocomplete="current-password") }}
+                    {% if form.password.errors %}
+                    <div class="form-errors">
+                        {% for error in form.password.errors %}
+                        <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center;">
+                <p style="font-size: 0.85rem; color: var(--text-light);">
+                    Having trouble? Run: <code style="background: var(--bg-light); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">python3 reset_admin_password.py</code>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
