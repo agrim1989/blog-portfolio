@@ -16,8 +16,19 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.style.top = '0';
             navbar.style.left = '0';
             navbar.style.right = '0';
-            navbar.style.width = '100%';
+            navbar.style.width = '100vw';
+            navbar.style.maxWidth = '100vw';
             navbar.style.margin = '0';
+            navbar.style.transform = 'none';
+            navbar.style.overflow = 'visible';
+            
+            // Also fix the container inside navbar
+            const navbarContainer = navbar.querySelector('.container');
+            if (navbarContainer) {
+                navbarContainer.style.width = '100%';
+                navbarContainer.style.maxWidth = '100%';
+                navbarContainer.style.margin = '0';
+            }
         }
         
         // Only add scroll effect on desktop
@@ -38,14 +49,24 @@ document.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('resize', function() {
             const isMobileNow = checkMobile();
             if (isMobileNow) {
-                // Switched to mobile - ensure navbar is fixed
+                // Switched to mobile - ensure navbar is fixed and full width
                 navbar.style.position = 'fixed';
                 navbar.style.top = '0';
                 navbar.style.left = '0';
                 navbar.style.right = '0';
-                navbar.style.width = '100%';
+                navbar.style.width = '100vw';
+                navbar.style.maxWidth = '100vw';
                 navbar.style.margin = '0';
                 navbar.style.transform = 'none';
+                navbar.style.overflow = 'visible';
+                
+                // Also fix the container inside navbar
+                const navbarContainer = navbar.querySelector('.container');
+                if (navbarContainer) {
+                    navbarContainer.style.width = '100%';
+                    navbarContainer.style.maxWidth = '100%';
+                    navbarContainer.style.margin = '0';
+                }
             } else if (!isMobile && isMobileNow !== isMobile) {
                 // Switched to desktop - allow scroll effect
                 navbar.style.position = '';
@@ -53,7 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 navbar.style.left = '';
                 navbar.style.right = '';
                 navbar.style.width = '';
+                navbar.style.maxWidth = '';
                 navbar.style.margin = '';
+                navbar.style.transform = '';
+                navbar.style.overflow = '';
+                
+                const navbarContainer = navbar.querySelector('.container');
+                if (navbarContainer) {
+                    navbarContainer.style.width = '';
+                    navbarContainer.style.maxWidth = '';
+                    navbarContainer.style.margin = '';
+                }
             }
             isMobile = isMobileNow;
         });
