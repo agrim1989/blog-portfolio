@@ -41,6 +41,13 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
+    padding-top: 0;
+}
+
+/* Ensure main content doesn't get hidden behind sticky navbar */
+.main-content {
+    position: relative;
+    z-index: 1;
 }
 
 * {
@@ -422,13 +429,14 @@ body.menu-open::before {
 
 /* Modern Hero Section */
 .hero {
-    padding: 6rem 0 4rem;
+    padding: 8rem 0 4rem;
     background: var(--gradient-soft);
     position: relative;
     overflow: hidden;
     min-height: 70vh;
     display: flex;
     align-items: center;
+    margin-top: 0;
 }
 
 .hero::before {
@@ -576,9 +584,10 @@ body.menu-open::before {
 
 .hero-links {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
     margin-top: 1.5rem;
+    align-items: center;
 }
 
 .hero-contact-info {
@@ -710,6 +719,7 @@ body.menu-open::before {
 /* Section Styles */
 .section {
     padding: 5rem 0;
+    scroll-margin-top: 80px;
 }
 
 .section-title {
@@ -752,6 +762,7 @@ body.menu-open::before {
 .skills-section {
     padding: 5rem 0;
     background: var(--bg-light);
+    scroll-margin-top: 80px;
 }
 
 .skills-grid {
@@ -864,6 +875,7 @@ body.menu-open::before {
 /* Projects Section */
 .projects-section {
     padding: 5rem 0;
+    scroll-margin-top: 80px;
 }
 
 .projects-grid {
@@ -1021,15 +1033,67 @@ body.menu-open::before {
     padding: 4px;
 }
 
-.resume-header-text h1 {
+.resume-name-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.resume-name-row h1 {
     font-size: 2.75rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
+    margin: 0;
     background: var(--gradient-modern);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -1px;
+}
+
+.resume-download-btn {
+    position: relative;
+}
+
+.resume-download-btn::after {
+    content: 'Download Resume';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+}
+
+.resume-download-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.25rem;
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+.resume-download-btn:hover::after,
+.resume-download-btn:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px);
 }
 
 .resume-header-text h2 {
@@ -1295,20 +1359,10 @@ body.menu-open::before {
     margin-top: 1rem;
 }
 
-.project-item-resume .project-links a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--primary-color);
-}
-
-.project-item-resume .project-links a:hover {
-    background: var(--primary-color);
-    color: white;
+.project-item-resume .project-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 /* Achievements */
@@ -2509,8 +2563,18 @@ body.menu-open::before {
         margin: 0 auto;
     }
     
-    .resume-header-text h1 {
+    .resume-name-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .resume-name-row h1 {
         font-size: 2rem;
+    }
+    
+    .resume-download-btn {
+        margin-top: 0.5rem;
     }
     
     .resume-header-text h2 {
@@ -2818,8 +2882,18 @@ body.menu-open::before {
         height: 120px;
     }
     
-    .resume-header-text h1 {
+    .resume-name-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .resume-name-row h1 {
         font-size: 1.75rem;
+    }
+    
+    .resume-download-btn {
+        margin-top: 0.25rem;
     }
     
     .resume-header-text h2 {
@@ -3566,7 +3640,7 @@ select.form-control {
     gap: 0.5rem;
 }
 
-/* Icon-only button (favicon style) */
+/* Icon-only button (favicon style) - Subtle colors */
 .btn-icon-only {
     display: inline-flex;
     align-items: center;
@@ -3575,23 +3649,49 @@ select.form-control {
     height: 40px;
     padding: 0;
     border-radius: 50%;
-    background: var(--gradient-modern);
-    color: white;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
     text-decoration: none;
-    transition: all 0.3s;
-    box-shadow: var(--shadow-md);
-    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.2);
     cursor: pointer;
+    position: relative;
 }
 
 .btn-icon-only:hover {
     transform: translateY(-2px) scale(1.05);
-    box-shadow: var(--shadow-lg);
+    background: rgba(99, 102, 241, 0.15);
+    color: #4f46e5;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.btn-icon-only:active {
+    transform: translateY(0) scale(0.98);
 }
 
 .btn-icon-only svg {
     width: 20px;
     height: 20px;
+    transition: transform 0.3s;
+}
+
+.btn-icon-only:hover svg {
+    transform: scale(1.1);
+}
+
+.btn-icon-only.btn-submit {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.btn-icon-only.btn-submit:hover {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.15);
 }
 
 /* Clickable table row */
@@ -3601,6 +3701,125 @@ select.form-control {
 
 .clickable-row:hover {
     background-color: #f8fafc !important;
+}
+
+/* Modern Features: Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Scroll Progress Indicator */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-modern);
+    z-index: 9999;
+    transition: width 0.1s ease-out;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+
+/* Smooth page transitions */
+body {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Enhanced animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Removed parallax transform to prevent overlap */
+.hero, .resume-header {
+    position: relative;
+}
+
+/* Loading state */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced hover effects */
+.project-card:hover,
+.skill-category:hover,
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transitions for all interactive elements */
+a, button, .btn, .card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.btn-icon-only:focus,
+.btn:focus,
+a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 /* Admin Responsive Styles */

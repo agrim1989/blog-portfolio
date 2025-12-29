@@ -174,5 +174,125 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Modern Features: Fade-in animations on scroll
+    const fadeElements = document.querySelectorAll('.resume-section, .project-card, .skill-category, .blog-card');
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    fadeElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        fadeObserver.observe(el);
+    });
+    
+    // Smooth page transitions
+    document.querySelectorAll('a[href^="/"], a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('href').startsWith('#')) return;
+            if (this.target === '_blank') return;
+            
+            const href = this.getAttribute('href');
+            if (href && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                // Add loading state
+                document.body.style.opacity = '0.7';
+                document.body.style.transition = 'opacity 0.2s';
+            }
+        });
+    });
+    
+    // Removed parallax effect to prevent overlap issues
+    // Parallax can cause content overlap on scroll
+    
+    // Lazy loading images with fade-in
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    img.style.opacity = '0';
+                    img.style.transition = 'opacity 0.5s';
+                    img.onload = () => {
+                        img.style.opacity = '1';
+                    };
+                }
+                imageObserver.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: '50px'
+    });
+    
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+    
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn-icon-only, .btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+    
+    // Progress indicator on scroll
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    document.body.appendChild(progressBar);
+    
+    window.addEventListener('scroll', () => {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.pageYOffset / windowHeight) * 100;
+        progressBar.style.width = scrolled + '%';
+    });
+    
+    // Smooth reveal animations for text
+    const textElements = document.querySelectorAll('h1, h2, h3, p, .bio');
+    const textObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 50);
+                textObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    textElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(10px)';
+        el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+        textObserver.observe(el);
+    });
 });
 
