@@ -1729,6 +1729,195 @@ class ConsistentHash:
                 'status': 'published',
                 'published_date': datetime(2024, 12, 24, 16, 0, 0),
                 'featured_image': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop&q=80'
+            },
+            {
+                'title': 'Python Learning',
+                'slug': 'python-learning',
+                'content': '''<h2>Python Learning - Complete Guide</h2>
+                <p>Welcome to Python Learning! This comprehensive guide takes you from Python basics to advanced concepts. Whether you're a complete beginner or looking to enhance your skills, this guide is structured to help you learn Python step by step.</p>
+                
+                <h3>Why Learn Python?</h3>
+                <p>Python is one of the most popular and beginner-friendly programming languages in the world. It's used in various domains including web development, data science, artificial intelligence, automation, and more. Its simplicity and readability make it perfect for beginners, while its extensive libraries make it powerful for professionals.</p>
+                
+                <h3>Learning Path</h3>
+                <p>This guide is divided into three levels: <strong>Python Basics</strong>, <strong>Python Intermediate</strong>, and <strong>Python Advanced</strong>. Start with the basics and progress through each level to become a proficient Python developer.</p>
+                
+                <h2>Python Basics</h2>
+                <p>Start your Python journey with fundamental concepts. Learn the basics of Python syntax, data types, and control structures.</p>
+                <div class="topics-list">
+                    <div class="topic-item">
+                        <a href="/blog/topic/introduction-to-python" class="topic-link">
+                            <h4>1. Introduction to Python</h4>
+                            <p>Learn what Python is, its history, and why it's so popular. Understand Python's syntax and write your first program.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/variables-and-data-types" class="topic-link">
+                            <h4>2. Variables and Data Types</h4>
+                            <p>Understanding variables, strings, numbers, booleans, and basic data types. Learn to store and manipulate data.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/operators-and-expressions" class="topic-link">
+                            <h4>3. Operators and Expressions</h4>
+                            <p>Master arithmetic, comparison, and logical operators. Learn to perform calculations and comparisons.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/control-flow" class="topic-link">
+                            <h4>4. Control Flow: If-Else Statements</h4>
+                            <p>Master conditional statements and decision making. Learn if, elif, and else statements.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/loops" class="topic-link">
+                            <h4>5. Loops: For and While</h4>
+                            <p>Learn to iterate over data with for loops and while loops. Understand loop control statements.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/lists-and-tuples" class="topic-link">
+                            <h4>6. Lists and Tuples</h4>
+                            <p>Working with lists, tuples, and sequence operations. Learn to store and manipulate collections.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/dictionaries-and-sets" class="topic-link">
+                            <h4>7. Dictionaries and Sets</h4>
+                            <p>Understanding dictionaries, sets, and their operations. Learn key-value pairs and unique collections.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/functions" class="topic-link">
+                            <h4>8. Functions in Python</h4>
+                            <p>Create reusable code blocks with functions, parameters, return values, and scope.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/file-handling" class="topic-link">
+                            <h4>9. File Handling</h4>
+                            <p>Reading and writing files, working with file operations. Learn to interact with files.</p>
+                        </a>
+                    </div>
+                </div>
+                
+                <h2>Python Intermediate</h2>
+                <p>Build on your basics with intermediate concepts. Learn about object-oriented programming, error handling, and more advanced data structures.</p>
+                <div class="topics-list">
+                    <div class="topic-item">
+                        <a href="/blog/topic/object-oriented-programming" class="topic-link">
+                            <h4>1. Object-Oriented Programming</h4>
+                            <p>Learn classes, objects, inheritance, and polymorphism. Master the OOP paradigm.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/exception-handling" class="topic-link">
+                            <h4>2. Exception Handling</h4>
+                            <p>Handle errors gracefully with try-except blocks and custom exceptions.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/modules-and-packages" class="topic-link">
+                            <h4>3. Modules and Packages</h4>
+                            <p>Creating and importing modules, package management. Organize code into reusable modules.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/list-comprehensions" class="topic-link">
+                            <h4>4. List Comprehensions</h4>
+                            <p>Learn concise ways to create lists. Master list, dictionary, and set comprehensions.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/lambda-functions" class="topic-link">
+                            <h4>5. Lambda Functions</h4>
+                            <p>Create anonymous functions with lambda. Learn when and how to use lambda functions.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/working-with-json" class="topic-link">
+                            <h4>6. Working with JSON</h4>
+                            <p>Parse and manipulate JSON data. Learn to work with APIs and data serialization.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/regular-expressions" class="topic-link">
+                            <h4>7. Regular Expressions</h4>
+                            <p>Pattern matching with regex. Learn to search, match, and manipulate text patterns.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/date-and-time" class="topic-link">
+                            <h4>8. Date and Time</h4>
+                            <p>Working with dates and times in Python. Learn datetime module and timezone handling.</p>
+                        </a>
+                    </div>
+                </div>
+                
+                <h2>Python Advanced</h2>
+                <p>Master advanced Python concepts for professional development. Learn decorators, generators, async programming, and more.</p>
+                <div class="topics-list">
+                    <div class="topic-item">
+                        <a href="/blog/topic/decorators-and-generators" class="topic-link">
+                            <h4>1. Decorators and Generators</h4>
+                            <p>Master decorators and generators for elegant and efficient code. Modify function behavior and create iterators.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/working-with-apis" class="topic-link">
+                            <h4>2. Working with APIs</h4>
+                            <p>Make HTTP requests and integrate with REST APIs. Master the requests library.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/database-operations" class="topic-link">
+                            <h4>3. Database Operations</h4>
+                            <p>Connect to databases and execute SQL queries. Work with SQLite, MySQL, and PostgreSQL.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/web-scraping" class="topic-link">
+                            <h4>4. Web Scraping with BeautifulSoup</h4>
+                            <p>Scrape web pages and extract data. Parse HTML and extract information from websites.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/testing-and-debugging" class="topic-link">
+                            <h4>5. Testing and Debugging</h4>
+                            <p>Unit testing with pytest and debugging techniques. Write tests and debug effectively.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/async-programming" class="topic-link">
+                            <h4>6. Async Programming</h4>
+                            <p>Write concurrent code with async/await and asyncio. Master asynchronous programming.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/context-managers" class="topic-link">
+                            <h4>7. Context Managers</h4>
+                            <p>Learn the 'with' statement and context managers. Manage resources efficiently.</p>
+                        </a>
+                    </div>
+                    <div class="topic-item">
+                        <a href="/blog/topic/metaclasses" class="topic-link">
+                            <h4>8. Metaclasses</h4>
+                            <p>Advanced topic on class creation. Understand how classes are created in Python.</p>
+                        </a>
+                    </div>
+                </div>
+                
+                <h3>Getting Started</h3>
+                <p>To get started with Python, you'll need to install Python on your computer. Visit python.org to download the latest version. Once installed, you can start writing Python code in any text editor or use an IDE like PyCharm or VS Code.</p>
+                
+                <h3>Practice Makes Perfect</h3>
+                <p>Remember, the best way to learn programming is by practicing. Try to write code every day, solve problems, and build small projects. Each topic in this guide includes practical examples that you can try yourself.</p>''',
+                'excerpt': 'Complete Python learning guide from basics to advanced. Learn Python fundamentals, intermediate concepts, and advanced topics with detailed explanations.',
+                'category': tech_category,
+                'tags': ['Python', 'Programming', 'Learning', 'Tutorial'],
+                'status': 'published',
+                'published_date': datetime(2024, 12, 25, 10, 0, 0),
+                'featured_image': 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&h=500&fit=crop&q=80'
             }
         ]
         

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Topic - {{ topic.title }}{% endblock %}
+
+{% block content %}
+<article class="topic-detail">
+    <div class="container">
+        <div class="post-back-button-top">
+            {% if python_learning_post %}
+            <a href="{{ url_for('blog_detail', slug=python_learning_post.slug) }}" class="btn-back-top">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Back to Python Learning</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('blog_list') }}" class="btn-back-top">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Back to Blog</span>
+            </a>
+            {% endif %}
+        </div>
+        {% if topic.category or topic.title %}
+        <div class="topic-header">
+            {% if topic.category %}
+            <div class="topic-meta">
+                <span class="topic-category">{{ topic.category }}</span>
+            </div>
+            {% endif %}
+            {% if topic.title %}
+            <h1 class="topic-title">{{ topic.title }}</h1>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="topic-content-wrapper">
+            <div class="topic-content-main">
+                {% if topic.image %}
+                <div class="topic-image">
+                    <img src="{{ topic.image }}" alt="{{ topic.title }}" loading="lazy">
+                </div>
+                {% endif %}
+                <div class="topic-body">
+                    {{ topic.content|safe }}
+                </div>
+
+                <div class="topic-navigation">
+                    {% if python_learning_post %}
+                    <a href="{{ url_for('blog_detail', slug=python_learning_post.slug) }}" class="btn btn-back">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Python Learning
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('blog_list') }}" class="btn btn-back">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Blog
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}
+

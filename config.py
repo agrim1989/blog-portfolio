@@ -23,6 +23,10 @@ class Config:
     
     # Pagination
     POSTS_PER_PAGE = 6
+    
+    # Razorpay Payment Settings
+    RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
+    RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
 
 
 class DevelopmentConfig(Config):

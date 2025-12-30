@@ -1,0 +1,623 @@
+{% extends 'base.html' %}
+
+{% block title %}System Design Course{% endblock %}
+
+{% block extra_js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                course_id: document.getElementById('course_id').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value || ''
+            };
+            
+            const submitBtn = paymentForm.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            try {
+                // Create order
+                const orderResponse = await fetch('/course/payment/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const orderData = await orderResponse.json();
+                
+                if (!orderResponse.ok) {
+                    throw new Error(orderData.error || 'Failed to create order');
+                }
+                
+                // Initialize Razorpay checkout
+                const options = {
+                    key: orderData.key_id,
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: 'System Design Course',
+                    description: 'Master System Design Course',
+                    order_id: orderData.order_id,
+                    handler: async function(response) {
+                        // Payment successful - verify payment
+                        try {
+                            const verifyResponse = await fetch('/course/payment/verify', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    payment_method: response.method || 'unknown'
+                                })
+                            });
+                            
+                            const verifyData = await verifyResponse.json();
+                            
+                            if (verifyResponse.ok && verifyData.success) {
+                                alert('Payment successful! You now have access to all course videos.');
+                                window.location.reload();
+                            } else {
+                                throw new Error(verifyData.error || 'Payment verification failed');
+                            }
+                        } catch (error) {
+                            console.error('Verification error:', error);
+                            alert('Payment verification failed. Please contact support.');
+                        }
+                    },
+                    prefill: {
+                        name: formData.name,
+                        email: formData.email,
+                        contact: formData.phone
+                    },
+                    theme: {
+                        color: '#667eea'
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            btnText.style.display = 'inline';
+                            btnLoading.style.display = 'none';
+                            submitBtn.disabled = false;
+                        }
+                    }
+                };
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Error: ' + error.message);
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Course Hero Section -->
+<section class="course-hero">
+    <div class="container">
+        <div class="course-hero-content">
+            <div class="course-badge">🚀 Comprehensive Course</div>
+            <h1>Master System Design</h1>
+            <p class="course-subtitle">From Fundamentals to Advanced Distributed Systems</p>
+            <p class="course-description">
+                Learn to design scalable, reliable, and efficient systems that power millions of users. 
+                This comprehensive course covers everything from basic concepts to advanced distributed system patterns.
+            </p>
+            <div class="course-cta">
+                <a href="#enroll" class="btn btn-primary">Enroll Now</a>
+                <a href="#curriculum" class="btn btn-secondary">View Curriculum</a>
+            </div>
+            <div class="course-stats">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Hours of Content</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Real-world Examples</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">System Design Problems</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Course Overview -->
+<section class="course-overview">
+    <div class="container">
+        <div class="section-header">
+            <h2>What You'll Learn</h2>
+            <p>Master the art of designing large-scale distributed systems</p>
+        </div>
+        <div class="learning-objectives">
+            <div class="objective-card">
+                <div class="objective-icon">📐</div>
+                <h3>System Design Fundamentals</h3>
+                <p>Understand core concepts, scalability, reliability, and performance optimization</p>
+            </div>
+            <div class="objective-card">
+                <div class="objective-icon">🏗️</div>
+                <h3>Architecture Patterns</h3>
+                <p>Learn microservices, event-driven architecture, and distributed system patterns</p>
+            </div>
+            <div class="objective-card">
+                <div class="objective-icon">💾</div>
+                <h3>Database Design</h3>
+                <p>Master SQL, NoSQL, caching strategies, and data replication techniques</p>
+            </div>
+            <div class="objective-card">
+                <div class="objective-icon">⚡</div>
+                <h3>Performance & Scalability</h3>
+                <p>Design systems that handle millions of requests with low latency</p>
+            </div>
+            <div class="objective-card">
+                <div class="objective-icon">🔒</div>
+                <h3>Security & Reliability</h3>
+                <p>Implement fault tolerance, disaster recovery, and security best practices</p>
+            </div>
+            <div class="objective-card">
+                <div class="objective-icon">🌐</div>
+                <h3>Real-world Systems</h3>
+                <p>Design systems like Twitter, Uber, Netflix, and more from scratch</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Learning Path / Roadmap -->
+<section class="learning-path" id="curriculum">
+    <div class="container">
+        <div class="section-header">
+            <h2>Course Curriculum</h2>
+            <p>Watch videos and learn at your own pace</p>
+        </div>
+        
+        <!-- Video List -->
+        <div class="videos-list">
+            {% if videos %}
+                {% for video in videos %}
+                <div class="video-item {% if not video.is_free and not has_subscription %}locked{% endif %}">
+                    <div class="video-item-header">
+                        <div class="video-number">{{ video.order }}</div>
+                        <div class="video-info">
+                            <h3>{{ video.title }}</h3>
+                            {% if video.description %}
+                            <p class="video-description">{{ video.description }}</p>
+                            {% endif %}
+                            {% if video.duration %}
+                            <span class="video-duration">{{ video.duration }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="video-status">
+                            {% if video.is_free %}
+                                <span class="badge badge-free">Free</span>
+                            {% elif has_subscription %}
+                                <span class="badge badge-unlocked">Unlocked</span>
+                            {% else %}
+                                <span class="badge badge-locked">🔒 Locked</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="video-content">
+                        {% if video.is_free or has_subscription %}
+                            <div class="video-player">
+                                {% if video.video_type == 'youtube' %}
+                                    {% set embed_url = video.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/') %}
+                                    <iframe src="{{ embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                {% elif video.video_type == 'vimeo' %}
+                                    {% set embed_url = video.video_url.replace('vimeo.com/', 'player.vimeo.com/video/') %}
+                                    <iframe src="{{ embed_url }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                {% else %}
+                                    <video controls>
+                                        <source src="{{ url_for('uploaded_file', file_type='videos', filename=video.video_url) }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="video-locked-overlay">
+                                <div class="locked-content">
+                                    <div class="lock-icon">🔒</div>
+                                    <h4>This video is locked</h4>
+                                    <p>Subscribe to the course to unlock all videos and get lifetime access</p>
+                                    <a href="#enroll" class="btn btn-primary">Unlock Course</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-videos">Course videos will be available soon.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Key Topics -->
+<section class="key-topics">
+    <div class="container">
+        <div class="section-header">
+            <h2>Key Topics Covered</h2>
+            <p>Comprehensive coverage of system design concepts</p>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-category">
+                <h3>🔧 Core Concepts</h3>
+                <ul>
+                    <li>Scalability (Horizontal vs Vertical)</li>
+                    <li>Reliability and Availability</li>
+                    <li>Performance Metrics (Latency, Throughput)</li>
+                    <li>Load Balancing Strategies</li>
+                    <li>Caching Strategies</li>
+                </ul>
+            </div>
+            <div class="topic-category">
+                <h3>🗄️ Data Management</h3>
+                <ul>
+                    <li>SQL vs NoSQL Databases</li>
+                    <li>Database Replication</li>
+                    <li>Database Sharding</li>
+                    <li>Data Consistency Models</li>
+                    <li>Event Sourcing</li>
+                </ul>
+            </div>
+            <div class="topic-category">
+                <h3>🌐 Distributed Systems</h3>
+                <ul>
+                    <li>Microservices Architecture</li>
+                    <li>Service Mesh</li>
+                    <li>Message Queues (Kafka, RabbitMQ)</li>
+                    <li>Distributed Locking</li>
+                    <li>Leader Election</li>
+                </ul>
+            </div>
+            <div class="topic-category">
+                <h3>⚡ Performance</h3>
+                <ul>
+                    <li>CDN and Edge Computing</li>
+                    <li>Database Indexing</li>
+                    <li>Query Optimization</li>
+                    <li>Connection Pooling</li>
+                    <li>Async Processing</li>
+                </ul>
+            </div>
+            <div class="topic-category">
+                <h3>🔐 Security & Reliability</h3>
+                <ul>
+                    <li>Authentication & Authorization</li>
+                    <li>Rate Limiting</li>
+                    <li>Circuit Breaker Pattern</li>
+                    <li>Health Checks</li>
+                    <li>Disaster Recovery</li>
+                </ul>
+            </div>
+            <div class="topic-category">
+                <h3>📊 Monitoring</h3>
+                <ul>
+                    <li>Logging and Tracing</li>
+                    <li>Metrics and Alerting</li>
+                    <li>Performance Monitoring</li>
+                    <li>Error Tracking</li>
+                    <li>Distributed Tracing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Prerequisites -->
+<section class="prerequisites">
+    <div class="container">
+        <div class="section-header">
+            <h2>Prerequisites</h2>
+            <p>What you need to know before starting</p>
+        </div>
+        <div class="prerequisites-content">
+            <div class="prereq-item">
+                <div class="prereq-icon">✓</div>
+                <div class="prereq-text">
+                    <h3>Basic Programming Knowledge</h3>
+                    <p>Familiarity with at least one programming language (Python, Java, JavaScript, etc.)</p>
+                </div>
+            </div>
+            <div class="prereq-item">
+                <div class="prereq-icon">✓</div>
+                <div class="prereq-text">
+                    <h3>Database Fundamentals</h3>
+                    <p>Basic understanding of databases (SQL queries, tables, relationships)</p>
+                </div>
+            </div>
+            <div class="prereq-item">
+                <div class="prereq-icon">✓</div>
+                <div class="prereq-text">
+                    <h3>Computer Networks</h3>
+                    <p>Basic knowledge of HTTP, REST APIs, and network protocols</p>
+                </div>
+            </div>
+            <div class="prereq-item">
+                <div class="prereq-icon">✓</div>
+                <div class="prereq-text">
+                    <h3>Data Structures</h3>
+                    <p>Understanding of basic data structures (arrays, hash maps, trees)</p>
+                </div>
+            </div>
+        </div>
+        <div class="prereq-note">
+            <p><strong>Note:</strong> No prior system design experience required! This course is designed for software engineers at all levels.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Course Modules -->
+<section class="course-modules">
+    <div class="container">
+        <div class="section-header">
+            <h2>Course Modules</h2>
+            <p>Detailed breakdown of course content</p>
+        </div>
+        <div class="modules-list">
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 1</span>
+                    <h3>Introduction to System Design</h3>
+                </div>
+                <div class="module-content">
+                    <p>Learn the fundamentals of system design, understand scalability, reliability, and performance metrics.</p>
+                    <ul>
+                        <li>What is System Design?</li>
+                        <li>Scalability, Reliability, and Availability</li>
+                        <li>Performance Metrics</li>
+                        <li>System Design Interview Process</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 2</span>
+                    <h3>Load Balancing & Caching</h3>
+                </div>
+                <div class="module-content">
+                    <p>Master load balancing strategies and caching mechanisms to improve system performance.</p>
+                    <ul>
+                        <li>Load Balancing Algorithms</li>
+                        <li>HTTP vs Layer 4 Load Balancing</li>
+                        <li>Caching Strategies (Cache-Aside, Write-Through, Write-Back)</li>
+                        <li>Redis and Memcached</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 3</span>
+                    <h3>Database Design & Scaling</h3>
+                </div>
+                <div class="module-content">
+                    <p>Learn to design and scale databases for high-traffic applications.</p>
+                    <ul>
+                        <li>SQL vs NoSQL</li>
+                        <li>Database Replication</li>
+                        <li>Database Sharding</li>
+                        <li>Consistency Models (ACID, BASE, CAP Theorem)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 4</span>
+                    <h3>Microservices & Distributed Systems</h3>
+                </div>
+                <div class="module-content">
+                    <p>Design and implement microservices architecture and distributed systems.</p>
+                    <ul>
+                        <li>Microservices Architecture</li>
+                        <li>Service Communication (REST, gRPC, Message Queues)</li>
+                        <li>Service Discovery</li>
+                        <li>API Gateway Pattern</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 5</span>
+                    <h3>Message Queues & Event Streaming</h3>
+                </div>
+                <div class="module-content">
+                    <p>Implement asynchronous processing and event-driven architecture.</p>
+                    <ul>
+                        <li>Message Queue Concepts</li>
+                        <li>Apache Kafka</li>
+                        <li>RabbitMQ</li>
+                        <li>Event-Driven Architecture</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <span class="module-number">Module 6</span>
+                    <h3>Real-world System Design</h3>
+                </div>
+                <div class="module-content">
+                    <p>Design complete systems from scratch - Twitter, Uber, Netflix, and more.</p>
+                    <ul>
+                        <li>Design Twitter (Social Media Platform)</li>
+                        <li>Design Uber (Ride-sharing System)</li>
+                        <li>Design Netflix (Video Streaming)</li>
+                        <li>Design WhatsApp (Chat System)</li>
+                        <li>Design URL Shortener</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="course-benefits">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Take This Course?</h2>
+            <p>Benefits of mastering system design</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">💼</div>
+                <h3>Career Advancement</h3>
+                <p>System design skills are essential for senior engineering roles at top tech companies</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎯</div>
+                <h3>Ace Interviews</h3>
+                <p>Master the system design interview questions asked by FAANG and other top companies</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🚀</div>
+                <h3>Build Scalable Systems</h3>
+                <p>Learn to design systems that can handle millions of users and billions of requests</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🧠</div>
+                <h3>Think Like an Architect</h3>
+                <p>Develop the mindset to break down complex problems and design elegant solutions</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">📚</div>
+                <h3>Comprehensive Content</h3>
+                <p>50+ hours of content covering everything from basics to advanced concepts</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎓</div>
+                <h3>Real-world Examples</h3>
+                <p>Learn by designing actual systems used by companies like Twitter, Uber, and Netflix</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Resources & References -->
+<section class="course-resources">
+    <div class="container">
+        <div class="section-header">
+            <h2>Additional Resources</h2>
+            <p>Curated resources to supplement your learning</p>
+        </div>
+        <div class="resources-content">
+            <div class="resource-category">
+                <h3>📖 Recommended Reading</h3>
+                <ul>
+                    <li><a href="https://interviewready.io/blog/system-design-roadmap-guide" target="_blank">System Design Roadmap Guide - InterviewReady</a></li>
+                    <li>Designing Data-Intensive Applications by Martin Kleppmann</li>
+                    <li>System Design Interview by Alex Xu</li>
+                    <li>High Performance Browser Networking by Ilya Grigorik</li>
+                </ul>
+            </div>
+            <div class="resource-category">
+                <h3>🔗 Useful Links</h3>
+                <ul>
+                    <li><a href="https://interviewready.io" target="_blank">InterviewReady - System Design Practice</a></li>
+                    <li>System Design Primer on GitHub</li>
+                    <li>High Scalability Blog</li>
+                    <li>Architecture Patterns on Medium</li>
+                </ul>
+            </div>
+            <div class="resource-category">
+                <h3>🛠️ Tools & Technologies</h3>
+                <ul>
+                    <li>Load Balancers: NGINX, HAProxy, AWS ELB</li>
+                    <li>Databases: PostgreSQL, MongoDB, Cassandra, Redis</li>
+                    <li>Message Queues: Kafka, RabbitMQ, AWS SQS</li>
+                    <li>Monitoring: Prometheus, Grafana, ELK Stack</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enrollment CTA -->
+<section class="enrollment-cta" id="enroll">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Master System Design?</h2>
+            <p>Join thousands of engineers who have transformed their careers with this comprehensive course</p>
+            
+            {% if not has_subscription %}
+            <div class="pricing-section">
+                <div class="price-display">
+                    <span class="currency">₹</span>
+                    <span class="amount">{{ "%.0f"|format(course.price) }}</span>
+                    <span class="period">one-time</span>
+                </div>
+                
+                <!-- Payment Form -->
+                <div class="payment-form-container">
+                    <form id="payment-form" class="payment-form">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone (optional)">
+                        </div>
+                        <input type="hidden" id="course_id" value="{{ course.id }}">
+                        <button type="submit" class="btn btn-primary btn-large btn-payment">
+                            <span class="btn-text">Pay ₹{{ "%.0f"|format(course.price) }} & Enroll</span>
+                            <span class="btn-loading" style="display: none;">Processing...</span>
+                        </button>
+                        <div class="payment-methods">
+                            <p class="payment-note">Secure payment via Razorpay</p>
+                            <div class="payment-icons">
+                                <span>💳 Card</span>
+                                <span>📱 UPI</span>
+                                <span>🏦 Net Banking</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="subscription-active">
+                <div class="success-icon">✓</div>
+                <h3>You have active subscription!</h3>
+                <p>You can access all course videos. <a href="#curriculum">View Curriculum</a></p>
+            </div>
+            {% endif %}
+            
+            <div class="cta-features">
+                <div class="cta-feature">✓ Lifetime Access</div>
+                <div class="cta-feature">✓ Certificate of Completion</div>
+                <div class="cta-feature">✓ 30-Day Money-Back Guarantee</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

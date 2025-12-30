@@ -122,11 +122,36 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (menuToggle && navMenu) {
+        // Ensure menu is properly initialized
+        console.log('Menu toggle found:', !!menuToggle);
+        console.log('Nav menu found:', !!navMenu);
+        const menuItems = navMenu.querySelectorAll('li');
+        console.log('Nav menu items count:', menuItems.length);
+        
         menuToggle.addEventListener('click', function(e) {
             e.stopPropagation();
-            navMenu.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-            body.classList.toggle('menu-open');
+            e.preventDefault();
+            const isActive = navMenu.classList.contains('active');
+            
+            if (isActive) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                body.classList.remove('menu-open');
+            } else {
+                navMenu.classList.add('active');
+                menuToggle.classList.add('active');
+                body.classList.add('menu-open');
+            }
+            
+            // Force reflow to ensure styles are applied
+            void navMenu.offsetWidth;
+            
+            // Debug log
+            console.log('Menu toggle clicked. Active:', !isActive);
+            console.log('Nav menu classes:', navMenu.className);
+            console.log('Nav menu transform:', window.getComputedStyle(navMenu).transform);
+            console.log('Nav menu visibility:', window.getComputedStyle(navMenu).visibility);
+            console.log('Nav menu opacity:', window.getComputedStyle(navMenu).opacity);
         });
         
         // Close menu when clicking outside
@@ -200,8 +225,8 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(item);
     });
     
-    // Add copy buttons to code blocks
-    const codeBlocks = document.querySelectorAll('.post-body pre');
+    // Add copy buttons to code blocks (both blog posts and topic pages)
+    const codeBlocks = document.querySelectorAll('.post-body pre, .topic-body pre');
     codeBlocks.forEach(pre => {
         // Skip if already has copy button
         if (pre.querySelector('.code-copy-btn')) {

@@ -34,6 +34,7 @@ class PostForm(FlaskForm):
     views_count = IntegerField('Views Count', validators=[Optional(), NumberRange(min=0)], default=0, description='Manually set the number of views for this post')
     meta_description = StringField('Meta Description', validators=[Optional(), Length(max=160)])
     meta_keywords = StringField('Meta Keywords', validators=[Optional(), Length(max=255)])
+    previous_post_id = SelectField('Previous Post (Continuation)', coerce=int, validators=[Optional()], description='Select a previous post if this is a continuation')
 
 
 class CategoryForm(FlaskForm):

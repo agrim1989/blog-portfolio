@@ -235,9 +235,13 @@ class Post(db.Model):
     views_count = db.Column(db.Integer, default=0)
     meta_description = db.Column(db.String(160))
     meta_keywords = db.Column(db.String(255))
+    previous_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)  # For continuation posts
     
     # Many-to-many relationship with Tag
     tags = db.relationship('Tag', secondary=post_tags, lazy='subquery', backref=db.backref('posts', lazy=True))
+    
+    # Relationship to previous post (for continuations)
+    previous_post = db.relationship('Post', remote_side=[id], backref='next_posts', foreign_keys=[previous_post_id])
     
     def get_reading_time(self):
         """Estimate reading time in minutes"""
@@ -247,6 +251,68 @@ class Post(db.Model):
     
     def __repr__(self):
         return f'<Post {self.title}>'
+
+
+class Course(db.Model):
+    """Course model for system design course"""
+    __tablename__ = 'courses'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    slug = db.Column(db.String(200), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    price = db.Column(db.Float, default=0.0)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    videos = db.relationship('CourseVideo', backref='course', lazy='dynamic', cascade='all, delete-orphan', order_by='CourseVideo.order')
+    subscriptions = db.relationship('CourseSubscription', backref='course', lazy='dynamic', cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        return f'<Course {self.title}>'
+
+
+class CourseVideo(db.Model):
+    """Course video model"""
+    __tablename__ = 'course_videos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    video_url = db.Column(db.String(500))  # YouTube/Vimeo URL or uploaded video
+    video_type = db.Column(db.String(50), default='youtube')  # youtube, vimeo, uploaded
+    duration = db.Column(db.String(20))  # e.g., "15:30"
+    order = db.Column(db.Integer, default=0)
+    is_free = db.Column(db.Boolean, default=False)  # First 2 videos are free
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<CourseVideo {self.title}>'
+
+
+class CourseSubscription(db.Model):
+    """Course subscription model"""
+    __tablename__ = 'course_subscriptions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
+    payment_id = db.Column(db.String(200), unique=True)  # Razorpay payment ID
+    order_id = db.Column(db.String(200), unique=True)  # Razorpay order ID
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(10), default='INR')
+    status = db.Column(db.String(50), default='pending')  # pending, completed, failed
+    payment_method = db.Column(db.String(50))  # upi, card, netbanking, etc.
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<CourseSubscription {self.email} - {self.status}>'
 
 
 def slugify(text):
