@@ -9,4 +9,6 @@ python-decouple==3.8
 gunicorn==21.2.0
 psycopg2-binary==2.9.9
 razorpay==1.4.1
+setuptools>=65.5.0
+requests==2.31.0
 

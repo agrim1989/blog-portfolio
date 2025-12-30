@@ -16,25 +16,32 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.style.left = '0';
             navbar.style.right = '0';
             navbar.style.width = '100%';
-            navbar.style.maxWidth = '100%';
+            navbar.style.maxWidth = '100vw';
             navbar.style.minWidth = '100%';
             navbar.style.margin = '0';
             navbar.style.marginLeft = '0';
             navbar.style.marginRight = '0';
             navbar.style.transform = 'none';
-            navbar.style.overflow = 'visible';
+            navbar.style.overflowX = 'hidden';
+            navbar.style.overflowY = 'visible';
             navbar.style.boxSizing = 'border-box';
+            
+            // Prevent body from scrolling horizontally
+            document.body.style.overflowX = 'hidden';
+            document.documentElement.style.overflowX = 'hidden';
             
             // Also fix the container inside navbar to be full width (100%)
             const navbarContainer = navbar.querySelector('.container');
             if (navbarContainer) {
                 navbarContainer.style.width = '100%';
-                navbarContainer.style.maxWidth = '100%';
+                navbarContainer.style.maxWidth = '100vw';
                 navbarContainer.style.minWidth = '100%';
                 navbarContainer.style.margin = '0 auto';
                 navbarContainer.style.marginLeft = '0';
                 navbarContainer.style.marginRight = '0';
                 navbarContainer.style.boxSizing = 'border-box';
+                navbarContainer.style.overflowX = 'hidden';
+                navbarContainer.style.overflowY = 'visible';
             }
         };
         
@@ -51,8 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.style.marginLeft = '';
             navbar.style.marginRight = '';
             navbar.style.transform = '';
-            navbar.style.overflow = '';
+            navbar.style.overflowX = '';
+            navbar.style.overflowY = '';
             navbar.style.boxSizing = '';
+            
+            // Reset body overflow
+            document.body.style.overflowX = '';
+            document.documentElement.style.overflowX = '';
             
             const navbarContainer = navbar.querySelector('.container');
             if (navbarContainer) {
@@ -63,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 navbarContainer.style.marginLeft = '';
                 navbarContainer.style.marginRight = '';
                 navbarContainer.style.boxSizing = '';
+                navbarContainer.style.overflowX = '';
+                navbarContainer.style.overflowY = '';
             }
         };
         
@@ -96,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (isMobileNow) {
                     // Switched to mobile - ensure navbar is fixed and full width
                     setMobileNavbar();
+                    // Ensure body doesn't scroll horizontally
+                    document.body.style.overflowX = 'hidden';
+                    document.documentElement.style.overflowX = 'hidden';
                 } else if (!isMobile && isMobileNow !== isMobile) {
                     // Switched to desktop - reset navbar
                     setDesktopNavbar();
@@ -109,9 +126,17 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 if (checkMobile()) {
                     setMobileNavbar();
+                    document.body.style.overflowX = 'hidden';
+                    document.documentElement.style.overflowX = 'hidden';
                 }
             }, 100);
         });
+        
+        // Prevent horizontal scrolling on initial load for mobile
+        if (isMobile) {
+            document.body.style.overflowX = 'hidden';
+            document.documentElement.style.overflowX = 'hidden';
+        }
         
         // Re-check on load to handle dynamic viewport changes
         window.addEventListener('load', () => {
